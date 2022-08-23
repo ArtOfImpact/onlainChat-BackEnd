@@ -12,8 +12,9 @@ import { Create, All, One, removeOne, updatePost, getLastTags } from './controll
 import multer from "multer"
 
 //'mongodb+srv://admin:738733@cluster0.csusu6s.mongodb.net/blog?retryWrites=true&w=majority'
+// mongodb+srv://admin:<password>@cluster0.csusu6s.mongodb.net/?retryWrites=true&w=majority
 //process.env.MONGODB_URI
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect("mongodb+srv://admin:738733@cluster0.csusu6s.mongodb.net/blog?retryWrites=true&w=majority")
     .then(() => {
         console.log("DB OK")
     }).catch((err) => {
