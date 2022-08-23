@@ -11,7 +11,9 @@ import { register, login, getMe } from './controllers/UserController.js'
 import { Create, All, One, removeOne, updatePost, getLastTags } from './controllers/PostController.js'
 import multer from "multer"
 
-mongoose.connect('mongodb+srv://admin:738733@cluster0.csusu6s.mongodb.net/blog?retryWrites=true&w=majority').then(() => {
+//'mongodb+srv://admin:738733@cluster0.csusu6s.mongodb.net/blog?retryWrites=true&w=majority'
+
+mongoose.connect(process.env.MONGODB_URL).then(() => {
     console.log("DB OK")
 }).catch((err) => {
     console.log("DB error", err)
@@ -53,7 +55,7 @@ App.delete('/post/:id', chekAuth, removeOne);
 App.patch('/post/:id', chekAuth, postCreateValidator, updatePost);
 
 
-App.listen(4444, (err) => {
+App.listen(process.env.PORT || 4444, (err) => {
     if (err) {
         return console.log(err);
     }
