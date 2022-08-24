@@ -1,11 +1,7 @@
 import express from "express"
-import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
 import cors from "cors"
 import mongoose from "mongoose"
 import { registerValidator, loginValidator, postCreateValidator } from "./validation/auth.js"
-import { validationResult } from "express-validator"
-import UserSchema from "./models/user.js"
 import chekAuth from "./utils/chekAuth.js"
 import { register, login, getMe } from './controllers/UserController.js'
 import { Create, All, One, removeOne, updatePost, getLastTags } from './controllers/PostController.js'
@@ -14,12 +10,26 @@ import multer from "multer"
 //'mongodb+srv://admin:738733@cluster0.csusu6s.mongodb.net/blog?retryWrites=true&w=majority'
 // mongodb+srv://admin:<password>@cluster0.csusu6s.mongodb.net/?retryWrites=true&w=majority
 //process.env.MONGODB_URI
-mongoose.connect("mongodb+srv://admin:738733@cluster0.csusu6s.mongodb.net/blog?retryWrites=true&w=majority")
-    .then(() => {
-        console.log("DB OK")
-    }).catch((err) => {
-        console.log("DB error", err)
-    })
+
+// mongoose.connect(process.env.MONGODB_URI)
+//     .then(() => {
+//         console.log("DB OK")
+//     }).catch((err) => {
+//         console.log("DB error", err)
+//     })
+
+try {
+    await mongoose.connect(process.env.MONGODB_URI)
+        .then(() => {
+            console.log("DB OK", process.env.MONGODB_URI)
+        })
+} catch (error) {
+    console.log("DB error", error)
+}
+
+mongoose.connection.on('error', err => {
+    logError(err);
+});
 
 const App = express();
 
@@ -56,10 +66,18 @@ App.get('/post/:id', One);
 App.delete('/post/:id', chekAuth, removeOne);
 App.patch('/post/:id', chekAuth, postCreateValidator, updatePost);
 
-
-App.listen(process.env.PORT || 4444, (err) => {
-    if (err) {
-        return console.log(err);
-    }
-    console.log("Server OK");
-})
+try {
+    App.listen(process.env.PORT, () => {
+        console.log(process.env.PORT);
+        console.log("Server OK");
+    })
+} catch (error) {
+    return console.log(error);
+}
+// App.listen(process.env.PORT, (err) => {
+//     if (err) {
+//         return console.log(err);
+//     }
+//     console.log(process.env.PORT);
+//     console.log("Server OK");
+// })
