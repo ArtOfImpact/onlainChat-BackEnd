@@ -72,7 +72,7 @@ try {
         console.log("Server OK");
     })
 } catch (error) {
-    return console.log(error);
+    console.log(error);
 }
 // App.listen(process.env.PORT, (err) => {
 //     if (err) {
